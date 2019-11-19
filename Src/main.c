@@ -137,8 +137,13 @@ int main(void)
 				LED_Display(++ubKeyNumber);
 
 				/* Set the data to be transmitted, the others are zero */
-				CanHandle.pTxMsg->Data[0] = ubKeyNumber;
-				CanHandle.pTxMsg->Data[1] = 0xAD;
+				CanHandle.pTxMsg->Data[0] = buffer_out_acc[0];
+				CanHandle.pTxMsg->Data[1] = buffer_out_acc[1];
+				CanHandle.pTxMsg->Data[2] = buffer_out_acc[2];
+				CanHandle.pTxMsg->Data[3] = buffer_out_acc[3];
+				CanHandle.pTxMsg->Data[4] = buffer_out_acc[4];
+				CanHandle.pTxMsg->Data[5] = buffer_out_acc[5];
+				CanHandle.pTxMsg->Data[6] = (char) pressure_LSB;
 
 				/* Start the Transmission process */
 				if (HAL_OK != HAL_CAN_Transmit(&CanHandle, 10))
@@ -240,7 +245,7 @@ static void CAN_Config(void)
 	CanHandle.pTxMsg->ExtId 	= 0x01;
 	CanHandle.pTxMsg->RTR 		= CAN_RTR_DATA;
 	CanHandle.pTxMsg->IDE 		= CAN_ID_STD;
-	CanHandle.pTxMsg->DLC 		= 2;
+	CanHandle.pTxMsg->DLC 		= 7;	// must be generalised
 }
 
 void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *CanHandle)
